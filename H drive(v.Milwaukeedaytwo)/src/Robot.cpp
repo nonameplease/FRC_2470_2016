@@ -35,24 +35,19 @@ class Robot: public SampleRobot
 
 public:
 	Robot() :
-
-			stick(0),// as they are declared above.
-			stick2(1),
-			motor_h1(4),
-			motor_h2(5),
-			motor_l1(0),
-			motor_l2(1),
-			motor_r1(2),
-			motor_r2(3),
-			motor_elevator(6),
-			motor_andymark(7),
-			grab(0,1),
-			limitSwitch(9)
-			//camera.StartAutomaticCapture()
-
-
-
-
+        stick(0),// as they are declared above.
+        stick2(1),
+        motor_h1(4),
+        motor_h2(5),
+        motor_l1(0),
+        motor_l2(1),
+        motor_r1(2),
+        motor_r2(3),
+        motor_elevator(6),
+        motor_andymark(7),
+        grab(0,1),
+        limitSwitch(9)
+        //camera.StartAutomaticCapture()
 
 	{
 		//chassis.SetExpiration(0.1);
@@ -89,13 +84,10 @@ public:
 	}
 
 	void RobotInit() override
-			{
-
-
-		//CameraServer::GetInstance()->StartAutomaticCapture();
-		//camera.StartAutomaticCapture();
-
-			}
+    {
+        //CameraServer::GetInstance()->StartAutomaticCapture();
+        //camera.StartAutomaticCapture();
+    }
 
 	/**
 	 * Drive left & right motors for 2 seconds then stop
@@ -119,28 +111,28 @@ public:
 
 		if (buttonvalue3 == true)
 		{
-		//Grab and run
-		motor_l1.Set(0.5);
-		motor_l2.Set(0.5);
-		motor_r1.Set(-0.5);
-		motor_r2.Set(-0.5);
-		Wait(0.5);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);
-		Wait(0.5);
-		grab.Set(DoubleSolenoid::kForward);
-		Wait(0.5);
-		motor_elevator.Set(-1);
-		Wait(1);
-		motor_elevator.Set(0);
-		Wait(0.5);
-		grab.Set(DoubleSolenoid::kReverse);
-		Wait(0.5);
-		motor_elevator.Set(1);
-		Wait(1);
-		motor_elevator.Set(0);
+            //Grab and run
+            motor_l1.Set(0.5);
+            motor_l2.Set(0.5);
+            motor_r1.Set(-0.5);
+            motor_r2.Set(-0.5);
+            Wait(0.5);
+            motor_l1.Set(0);
+            motor_l2.Set(0);
+            motor_r1.Set(0);
+            motor_r2.Set(0);
+            Wait(0.5);
+            grab.Set(DoubleSolenoid::kForward);
+            Wait(0.5);
+            motor_elevator.Set(-1);
+            Wait(1);
+            motor_elevator.Set(0);
+            Wait(0.5);
+            grab.Set(DoubleSolenoid::kReverse);
+            Wait(0.5);
+            motor_elevator.Set(1);
+            Wait(1);
+            motor_elevator.Set(0);
 		}
 
 		if (buttonvalue1 == true && buttonvalue4 == false)
@@ -205,12 +197,9 @@ public:
 		motor_r1.Set(0);
 		motor_r2.Set(0);
 
-
-
-
 		//container grabbing
 		/*motor_h1.Set(-0.5);
-	motor_h1.Set(-0.5);
+        motor_h1.Set(-0.5);
 		Wait(2.0);
 		motor_h1.Set(0);
 		motor_h1.Set(0);
@@ -229,9 +218,6 @@ public:
 		motor_andymark.Set(1);
 		Wait(5);
 		motor_andymark.Set(0);*/
-
-
-
 
 		//Drive forward
 		/*Wait(2.0);
@@ -256,12 +242,6 @@ public:
 		motor_r2.Set(0);*/
 
 
-
-
-
-
-
-
 		/*buttonValue1 = SmartDashboard::GetBoolean("DB/Button 1");
 		buttonValue2 = SmartDashboard::GetBoolean("DB/Button 2");
 		SmartDashboard::PutBoolean("DB/LED 1", buttonValue1);
@@ -269,7 +249,6 @@ public:
 		if(buttonValue1 == true && buttonValue2 == false)
 		{
 			SmartDashboard::PutBoolean("DB/LED 1", true);*/
-
 
 	}
 
@@ -281,55 +260,51 @@ public:
 		CameraServer::GetInstance()->StartAutomaticCapture();
 		while (IsOperatorControl() && IsEnabled())
 		{
+            //limitswitch
+            int limitswitch = 1;
+            limitswitch = limitSwitch.Get(); // 0-close 1-open
 
+            //elevator
+            if (stick2.GetRawButton(1))
+            {
+                motor_elevator.Set(-1);
+            }
+            else if (stick2.GetRawButton(2) && limitswitch == 1)
+            {
+                motor_elevator.Set(1);
+            }
+            else
+            {
+                motor_elevator.Set(0);
+            }
 
+            //double solenoid
+            if (stick2.GetRawButton(3))
+            {
+                grab.Set(DoubleSolenoid::kReverse);
+            }
+            else if (stick2.GetRawButton(4))
+            {
+                grab.Set(DoubleSolenoid::kForward);
+            }
+            else
+            {
+                grab.Set(DoubleSolenoid::kOff);
+            }
 
-
-				//limitswitch
-				int limitswitch = 1;
-				limitswitch = limitSwitch.Get(); // 0-close 1-open
-
-				//elevator
-							if (stick2.GetRawButton(1))
-								{
-								motor_elevator.Set(-1);
-								}
-							else if (stick2.GetRawButton(2) && limitswitch == 1)
-								{
-								motor_elevator.Set(1);
-								}
-							else
-								{
-								motor_elevator.Set(0);
-								}
-
-							//double solenoid
-							if (stick2.GetRawButton(3))
-								{
-								grab.Set(DoubleSolenoid::kReverse);
-								}
-							else if (stick2.GetRawButton(4))
-								{
-								grab.Set(DoubleSolenoid::kForward);
-								}
-							else
-								{
-								grab.Set(DoubleSolenoid::kOff);
-								}
-
-							//andymark motor
-							if (stick.GetRawButton(1))
-							{
-								motor_andymark.Set(1);
-							}
-							else if (stick.GetRawButton(2))
-							{
-								motor_andymark.Set(-1);
-							}
-							else
-							{
-								motor_andymark.Set(0);
-							}
+            //andymark motor
+            if (stick.GetRawButton(1))
+            {
+                motor_andymark.Set(1);
+            }
+            else if (stick.GetRawButton(2))
+            {
+                motor_andymark.Set(-1);
+            }
+            else
+            {
+                motor_andymark.Set(0);
+            }
 
 
 			//H Drive
@@ -360,11 +335,6 @@ public:
 				motor_r1.Set(0);
 				motor_r2.Set(0);
 			}
-
-
-
-
-
 
 			//motor powered solenoid
 /*			if (stick.GetRawButton(5))
