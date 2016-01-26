@@ -49,11 +49,6 @@ public:
 			grab(0,1),
 			limitSwitch(9)
 			//camera.StartAutomaticCapture()
-
-
-
-
-
 	{
 		//chassis.SetExpiration(0.1);
 	}
@@ -281,55 +276,51 @@ public:
 		CameraServer::GetInstance()->StartAutomaticCapture();
 		while (IsOperatorControl() && IsEnabled())
 		{
+			//limitswitch
+			int limitswitch = 1;
+			limitswitch = limitSwitch.Get(); // 0-close 1-open
 
+			//elevator
+			if (stick2.GetRawButton(1))
+			{
+				motor_elevator.Set(-1);
+			}
+			else if (stick2.GetRawButton(2) && limitswitch == 1)
+			{
+				motor_elevator.Set(1);
+			}
+			else
+			{
+				motor_elevator.Set(0);
+			}
 
+			//double solenoid
+			if (stick2.GetRawButton(3))
+			{
+				grab.Set(DoubleSolenoid::kReverse);
+			}
+			else if (stick2.GetRawButton(4))
+			{
+				grab.Set(DoubleSolenoid::kForward);
+			}
+			else
+			{
+				grab.Set(DoubleSolenoid::kOff);
+			}
 
-
-				//limitswitch
-				int limitswitch = 1;
-				limitswitch = limitSwitch.Get(); // 0-close 1-open
-
-				//elevator
-							if (stick2.GetRawButton(1))
-								{
-								motor_elevator.Set(-1);
-								}
-							else if (stick2.GetRawButton(2) && limitswitch == 1)
-								{
-								motor_elevator.Set(1);
-								}
-							else
-								{
-								motor_elevator.Set(0);
-								}
-
-							//double solenoid
-							if (stick2.GetRawButton(3))
-								{
-								grab.Set(DoubleSolenoid::kReverse);
-								}
-							else if (stick2.GetRawButton(4))
-								{
-								grab.Set(DoubleSolenoid::kForward);
-								}
-							else
-								{
-								grab.Set(DoubleSolenoid::kOff);
-								}
-
-							//andymark motor
-							if (stick.GetRawButton(1))
-							{
-								motor_andymark.Set(1);
-							}
-							else if (stick.GetRawButton(2))
-							{
-								motor_andymark.Set(-1);
-							}
-							else
-							{
-								motor_andymark.Set(0);
-							}
+			//andymark motor
+			if (stick.GetRawButton(1))
+			{
+				motor_andymark.Set(1);
+			}
+			else if (stick.GetRawButton(2))
+			{
+				motor_andymark.Set(-1);
+			}
+			else
+			{
+				motor_andymark.Set(0);
+			}
 
 
 			//H Drive
@@ -347,12 +338,12 @@ public:
 				motor_r2.Set((axis_1 + axis_4/2)/2);
 			}
 			/*else if(axis_4 > 0.2 || axis_4 < -0.2)
-						{
-			motor_l1.Set(axis_4);
-			motor_l2.Set(axis_4);
-			motor_r1.Set(axis_4);
-			motor_r2.Set(axis_4);
-						}*/
+			{
+				motor_l1.Set(axis_4);
+				motor_l2.Set(axis_4);
+				motor_r1.Set(axis_4);
+				motor_r2.Set(axis_4);
+			}*/
 			else
 			{
 				motor_l1.Set(0);
@@ -361,20 +352,14 @@ public:
 				motor_r2.Set(0);
 			}
 
-
-
-
-
-
 			//motor powered solenoid
-/*			if (stick.GetRawButton(5))
+	/*			if (stick.GetRawButton(5))
 				motor_solenoid.Set(1);
 			else if (stick.GetRawButton(6))
 				motor_solenoid.Set(-1);
 			else
 				motor_solenoid.Set(0);
-*/
-
+	*/
 			Wait(kupdateperiod);
 		}
 
