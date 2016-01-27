@@ -34,13 +34,19 @@ class Robot: public SampleRobot {
 
 public:
 	Robot() :
-
-			stick(0), // as they are declared above.
-			stick2(1), motor_h1(4), motor_h2(5), motor_l1(0), motor_l2(1), motor_r1(
-					2), motor_r2(3), motor_elevator(6), motor_andymark(7), grab(
-					0, 1), limitSwitch(9)
-	//camera.StartAutomaticCapture()
-
+        stick(0),// as they are declared above.
+        stick2(1),
+        motor_h1(4),
+        motor_h2(5),
+        motor_l1(0),
+        motor_l2(1),
+        motor_r1(2),
+        motor_r2(3),
+        motor_elevator(6),
+        motor_andymark(7),
+        grab(0,1),
+        limitSwitch(9)
+        //camera.StartAutomaticCapture()
 	{
 		//chassis.SetExpiration(0.1);
 	}
@@ -98,29 +104,30 @@ public:
 		SmartDashboard::PutBoolean("DB/LED 3", buttonvalue3);
 		SmartDashboard::PutBoolean("DB/LED 0", buttonvalue4);
 
-		if (buttonvalue3 == true) {
-			//Grab and run
-			motor_l1.Set(0.5);
-			motor_l2.Set(0.5);
-			motor_r1.Set(-0.5);
-			motor_r2.Set(-0.5);
-			Wait(0.5);
-			motor_l1.Set(0);
-			motor_l2.Set(0);
-			motor_r1.Set(0);
-			motor_r2.Set(0);
-			Wait(0.5);
-			grab.Set(DoubleSolenoid::kForward);
-			Wait(0.5);
-			motor_elevator.Set(-1);
-			Wait(1);
-			motor_elevator.Set(0);
-			Wait(0.5);
-			grab.Set(DoubleSolenoid::kReverse);
-			Wait(0.5);
-			motor_elevator.Set(1);
-			Wait(1);
-			motor_elevator.Set(0);
+		if (buttonvalue3 == true)
+		{
+            //Grab and run
+            motor_l1.Set(0.5);
+            motor_l2.Set(0.5);
+            motor_r1.Set(-0.5);
+            motor_r2.Set(-0.5);
+            Wait(0.5);
+            motor_l1.Set(0);
+            motor_l2.Set(0);
+            motor_r1.Set(0);
+            motor_r2.Set(0);
+            Wait(0.5);
+            grab.Set(DoubleSolenoid::kForward);
+            Wait(0.5);
+            motor_elevator.Set(-1);
+            Wait(1);
+            motor_elevator.Set(0);
+            Wait(0.5);
+            grab.Set(DoubleSolenoid::kReverse);
+            Wait(0.5);
+            motor_elevator.Set(1);
+            Wait(1);
+            motor_elevator.Set(0);
 		}
 
 		if (buttonvalue1 == true && buttonvalue4 == false) {
@@ -178,56 +185,57 @@ public:
 
 		//container grabbing
 		/*motor_h1.Set(-0.5);
-		 motor_h1.Set(-0.5);
-		 Wait(2.0);
-		 motor_h1.Set(0);
-		 motor_h1.Set(0);
-		 motor_andymark.Set(-1);
-		 Wait(6.0);
-		 motor_andymark.Set(0);
-		 motor_h1.Set(0.5);
-		 motor_h2.Set(0.5);
-		 Wait(1.0);
-		 motor_andymark.Set(1);
-		 Wait(1.0);
-		 motor_andymark.Set(0);
-		 Wait(1.0);
-		 motor_h1.Set(0);
-		 motor_h2.Set(0);
-		 motor_andymark.Set(1);
-		 Wait(5);
-		 motor_andymark.Set(0);*/
+
+        motor_h1.Set(-0.5);
+		Wait(2.0);
+		motor_h1.Set(0);
+		motor_h1.Set(0);
+		motor_andymark.Set(-1);
+		Wait(6.0);
+		motor_andymark.Set(0);
+		motor_h1.Set(0.5);
+		motor_h2.Set(0.5);
+		Wait(1.0);
+		motor_andymark.Set(1);
+		Wait(1.0);
+		motor_andymark.Set(0);
+		Wait(1.0);
+		motor_h1.Set(0);
+		motor_h2.Set(0);
+		motor_andymark.Set(1);
+		Wait(5);
+		motor_andymark.Set(0);*/
 
 		//Drive forward
 		/*Wait(2.0);
-		 motor_l1.Set(0.5);
-		 motor_l2.Set(0.5);
-		 motor_r1.Set(-0.5);
-		 motor_r2.Set(-0.5);
-		 Wait(2.0);
-		 motor_l1.Set(0);
-		 motor_l2.Set(0);
-		 motor_r1.Set(0);
-		 motor_r2.Set(0);
-		 Wait(0.5);
-		 motor_l1.Set(0.3);
-		 motor_l2.Set(0.3);
-		 motor_r1.Set(0.3);
-		 motor_r2.Set(0.3);
-		 Wait(0.5);
-		 motor_l1.Set(0);
-		 motor_l2.Set(0);
-		 motor_r1.Set(0);
-		 motor_r2.Set(0);*/
+		motor_l1.Set(0.5);
+		motor_l2.Set(0.5);
+		motor_r1.Set(-0.5);
+		motor_r2.Set(-0.5);
+		Wait(2.0);
+		motor_l1.Set(0);
+		motor_l2.Set(0);
+		motor_r1.Set(0);
+		motor_r2.Set(0);
+		Wait(0.5);
+		motor_l1.Set(0.3);
+		motor_l2.Set(0.3);
+		motor_r1.Set(0.3);
+		motor_r2.Set(0.3);
+		Wait(0.5);
+		motor_l1.Set(0);
+		motor_l2.Set(0);
+		motor_r1.Set(0);
+		motor_r2.Set(0);*/
+
 
 		/*buttonValue1 = SmartDashboard::GetBoolean("DB/Button 1");
-		 buttonValue2 = SmartDashboard::GetBoolean("DB/Button 2");
-		 SmartDashboard::PutBoolean("DB/LED 1", buttonValue1);
-		 SmartDashboard::PutBoolean("DB/LED 2", buttonValue2);
-		 if(buttonValue1 == true && buttonValue2 == false)
-		 {
-		 SmartDashboard::PutBoolean("DB/LED 1", true);*/
-
+		buttonValue2 = SmartDashboard::GetBoolean("DB/Button 2");
+		SmartDashboard::PutBoolean("DB/LED 1", buttonValue1);
+		SmartDashboard::PutBoolean("DB/LED 2", buttonValue2);
+		if(buttonValue1 == true && buttonValue2 == false)
+		{
+			SmartDashboard::PutBoolean("DB/LED 1", true);*/
 	}
 
 	/**
@@ -235,6 +243,7 @@ public:
 	 */
 	void OperatorControl() {
 		CameraServer::GetInstance()->StartAutomaticCapture();
+
 		while (IsOperatorControl() && IsEnabled()) {
 
 			//limit switch
