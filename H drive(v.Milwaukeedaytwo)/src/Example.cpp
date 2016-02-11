@@ -5,8 +5,8 @@
 // For instance, someone may replace "Example" with Motor
 //
 //-------------------------------
-//
 
+//Example is a thing, or a NOUN
 class Example
 {
 	//include variables that are needed for multiple functions here. Most classes won't need many.
@@ -25,6 +25,7 @@ public:
 	}
 
 	//have example doSomething when this is called. and return a bool(true/false) if it succeded or not
+	//This does something...like a VERB
 	bool doSomething()
 	{
 		//Do some code here
