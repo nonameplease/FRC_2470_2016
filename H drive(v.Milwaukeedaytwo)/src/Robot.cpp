@@ -1,3 +1,10 @@
+/*
+ * Robot.cpp
+ *
+ *  Created on: Jan 27, 2016
+ *      Author: bpsstudent
+ */
+
 #include "WPILib.h"
 #include "Joystick.h"
 #include "CameraServer.h"
@@ -12,28 +19,15 @@
  * don't. Unless you know what you are doing, complex code will be much more difficult under
  * this system. Use IterativeRobot or Command-Based instead if you're new.
  */
-class Robot: public SampleRobot
+class Robot : public SampleRobot
 {
-	Joystick stick;// only joystick
-	Joystick stick2;
-	VictorSP motor_h1;
-	VictorSP motor_h2;
-	VictorSP motor_l1;
-	VictorSP motor_l2;
-	VictorSP motor_r1;
-	VictorSP motor_r2;
-	VictorSP motor_elevator;
-	VictorSP motor_andymark;
-	DoubleSolenoid grab;
-	DigitalInput limitSwitch;
-	bool buttonvalue1;
-	bool buttonvalue2;
-	bool buttonvalue3;
-	bool buttonvalue4;
+	//Variables that we will want to use throughout the program
+	Joystick stick; //A Joystick that we can use
 
-	double kupdateperiod = 0.05;
 
+	//Public means that other files can use these functions
 public:
+
 	Robot() :
 
 			stick(0),// as they are declared above.
@@ -49,228 +43,23 @@ public:
 			grab(0,1),
 			limitSwitch(9)
 			//camera.StartAutomaticCapture()
+
 	{
-		//chassis.SetExpiration(0.1);
+		//Can add other "initialization" code here
 	}
 
-	//custom functions
-	void driveforward(double power, double time)
-	{
-		motor_l1.Set(-power);
-		motor_l2.Set(-power);
-		motor_r1.Set(power);
-		motor_r2.Set(power);
-		Wait(time);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);
-	}
-
-	void turn(double power, double time)
-	{
-		/*
-		 * negative power: turn left, positive power: turn right
-		 */
-		motor_l1.Set(power);
-		motor_l2.Set(power);
-		motor_r1.Set(power);
-		motor_r2.Set(power);
-		Wait(time);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);
-	}
-
+	//Will be called to initialize the robot
+	//Should be called from the FRC program itself
 	void RobotInit() override
-			{
+	{
+		//Add initialization code here
+	}
 
-
-		//CameraServer::GetInstance()->StartAutomaticCapture();
-		//camera.StartAutomaticCapture();
-
-			}
-
-	/**
-	 * Drive left & right motors for 2 seconds then stop
-	 */
 	void Autonomous()
 	{
-
-		/*buttonValue1 = SmartDashboard::GetBoolean("DB/Button 1");
-		buttonValue2 = SmartDashboard::GetBoolean("DB/Button 2");
-		SmartDashboard::PutBoolean("DB/LED 1", buttonValue1);
-		SmartDashboard::PutBoolean("DB/LED 2", buttonValue2);
-		if(buttonValue1 == true && buttonValue2 == false)*/
-		buttonvalue1 = SmartDashboard::GetBoolean("DB/Button 1"); //slide left/forward
-		buttonvalue2 = SmartDashboard::GetBoolean("DB/Button 2"); //slide right/backward
-		buttonvalue3 = SmartDashboard::GetBoolean("DB/Button 3"); //grab stuff
-		buttonvalue4 = SmartDashboard::GetBoolean("DB/Button 0"); //switch to drive forward and backward
-		SmartDashboard::PutBoolean("DB/LED 1", buttonvalue1);
-		SmartDashboard::PutBoolean("DB/LED 2", buttonvalue2);
-		SmartDashboard::PutBoolean("DB/LED 3", buttonvalue3);
-		SmartDashboard::PutBoolean("DB/LED 0", buttonvalue4);
-
-		if (buttonvalue3 == true)
-		{
-		//Grab and run
-		motor_l1.Set(0.5);
-		motor_l2.Set(0.5);
-		motor_r1.Set(-0.5);
-		motor_r2.Set(-0.5);
-		Wait(0.5);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);
-		Wait(0.5);
-		grab.Set(DoubleSolenoid::kForward);
-		Wait(0.5);
-		motor_elevator.Set(-1);
-		Wait(1);
-		motor_elevator.Set(0);
-		Wait(0.5);
-		grab.Set(DoubleSolenoid::kReverse);
-		Wait(0.5);
-		motor_elevator.Set(1);
-		Wait(1);
-		motor_elevator.Set(0);
-		}
-
-		if (buttonvalue1 == true && buttonvalue4 == false)
-		{
-			//H-Drive sideways left
-			motor_h1.Set(-0.5);
-			motor_h2.Set(-0.5);
-			Wait(3);
-			motor_h1.Set(0);
-			motor_h2.Set(0);
-		}
-		else if (buttonvalue1 == true && buttonvalue4 == true)
-		{
-			motor_l1.Set(0.5);
-			motor_l2.Set(0.5);
-			motor_r1.Set(-0.5);
-			motor_r2.Set(-0.5);
-			Wait(4);
-			motor_l1.Set(0);
-			motor_l2.Set(0);
-			motor_r1.Set(0);
-			motor_r2.Set(0);
-			Wait(0.5);
-		}
-		else if (buttonvalue2 == true && buttonvalue4 == false)
-		{
-			//H-Drive sideways right
-			motor_h1.Set(0.5);
-			motor_h2.Set(0.5);
-			Wait(3);
-			motor_h1.Set(0);
-			motor_h2.Set(0);
-		}
-		else if (buttonvalue1 == true && buttonvalue4 == true)
-		{
-			motor_l1.Set(-0.5);
-			motor_l2.Set(-0.5);
-			motor_r1.Set(0.5);
-			motor_r2.Set(0.5);
-			Wait(4);
-			motor_l1.Set(0);
-			motor_l2.Set(0);
-			motor_r1.Set(0);
-			motor_r2.Set(0);
-			Wait(0.5);
-		}
-		else if (buttonvalue1 == true && buttonvalue2 == true)
-		{
-
-		}
-
-		Wait(1);
-		grab.Set(DoubleSolenoid::kForward);
-		Wait(1);
-		motor_l1.Set(-0.5);
-		motor_l2.Set(-0.5);
-		motor_r1.Set(0.5);
-		motor_r2.Set(0.5);
-		Wait(1);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);
-
-
-
-
-		//container grabbing
-		/*motor_h1.Set(-0.5);
-	motor_h1.Set(-0.5);
-		Wait(2.0);
-		motor_h1.Set(0);
-		motor_h1.Set(0);
-		motor_andymark.Set(-1);
-		Wait(6.0);
-		motor_andymark.Set(0);
-		motor_h1.Set(0.5);
-		motor_h2.Set(0.5);
-		Wait(1.0);
-		motor_andymark.Set(1);
-		Wait(1.0);
-		motor_andymark.Set(0);
-		Wait(1.0);
-		motor_h1.Set(0);
-		motor_h2.Set(0);
-		motor_andymark.Set(1);
-		Wait(5);
-		motor_andymark.Set(0);*/
-
-
-
-
-		//Drive forward
-		/*Wait(2.0);
-		motor_l1.Set(0.5);
-		motor_l2.Set(0.5);
-		motor_r1.Set(-0.5);
-		motor_r2.Set(-0.5);
-		Wait(2.0);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);
-		Wait(0.5);
-		motor_l1.Set(0.3);
-		motor_l2.Set(0.3);
-		motor_r1.Set(0.3);
-		motor_r2.Set(0.3);
-		Wait(0.5);
-		motor_l1.Set(0);
-		motor_l2.Set(0);
-		motor_r1.Set(0);
-		motor_r2.Set(0);*/
-
-
-
-
-
-
-
-
-		/*buttonValue1 = SmartDashboard::GetBoolean("DB/Button 1");
-		buttonValue2 = SmartDashboard::GetBoolean("DB/Button 2");
-		SmartDashboard::PutBoolean("DB/LED 1", buttonValue1);
-		SmartDashboard::PutBoolean("DB/LED 2", buttonValue2);
-		if(buttonValue1 == true && buttonValue2 == false)
-		{
-			SmartDashboard::PutBoolean("DB/LED 1", true);*/
-
-
+		//Add autonomous code here
 	}
 
-	/**
-	 * Runs the motors with arcade steering.
-	 */
 	void OperatorControl()
 	{
 		CameraServer::GetInstance()->StartAutomaticCapture();
@@ -372,8 +161,11 @@ public:
 		grab.Set(DoubleSolenoid::kReverse);
 		Wait(4.0);
 		grab.Set(DoubleSolenoid::kForward);
-	}
 
+	}
 };
 
 START_ROBOT_CLASS(Robot);
+
+
+
