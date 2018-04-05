@@ -28,9 +28,22 @@ class Robot : public SampleRobot
 	//Public means that other files can use these functions
 public:
 
-	//This is a "Constructor" and will be called when this class gets made somewhere
 	Robot() :
-		stick(0) //Initialize the Joystick to channel/port 0
+
+			stick(0),// as they are declared above.
+			stick2(1),
+			motor_h1(4),
+			motor_h2(5),
+			motor_l1(0),
+			motor_l2(1),
+			motor_r1(2),
+			motor_r2(3),
+			motor_elevator(6),
+			motor_andymark(7),
+			grab(0,1),
+			limitSwitch(9)
+			//camera.StartAutomaticCapture()
+
 	{
 		//Can add other "initialization" code here
 	}
@@ -49,7 +62,106 @@ public:
 
 	void OperatorControl()
 	{
-		//Add "Manual mode" code here
+		CameraServer::GetInstance()->StartAutomaticCapture();
+		while (IsOperatorControl() && IsEnabled())
+		{
+			//limitswitch
+			int limitswitch = 1;
+			limitswitch = limitSwitch.Get(); // 0-close 1-open
+
+			//elevator
+			if (stick2.GetRawButton(1))
+			{
+				motor_elevator.Set(-1);
+			}
+			else if (stick2.GetRawButton(2) && limitswitch == 1)
+			{
+				motor_elevator.Set(1);
+			}
+			else
+			{
+				motor_elevator.Set(0);
+			}
+
+			//double solenoid
+			if (stick2.GetRawButton(3))
+			{
+				grab.Set(DoubleSolenoid::kReverse);
+			}
+			else if (stick2.GetRawButton(4))
+			{
+				grab.Set(DoubleSolenoid::kForward);
+			}
+			else
+			{
+				grab.Set(DoubleSolenoid::kOff);
+			}
+
+			//andymark motor
+			if (stick.GetRawButton(1))
+			{
+				motor_andymark.Set(1);
+			}
+			else if (stick.GetRawButton(2))
+			{
+				motor_andymark.Set(-1);
+			}
+			else
+			{
+				motor_andymark.Set(0);
+			}
+
+
+			//H Drive
+			double axis_0 = stick.GetRawAxis(0);
+			motor_h1.Set(axis_0);
+			motor_h2.Set(axis_0);
+
+			double axis_1 = stick.GetRawAxis(1);
+			double axis_4 = stick.GetRawAxis(4);
+			if(axis_1 > 0.2 || axis_1 < -0.2 || axis_4 > 0.2 || axis_4 < -0.2)
+			{
+				motor_l1.Set((-axis_1 + axis_4/2)/2);
+				motor_l2.Set((-axis_1 + axis_4/2)/2);
+				motor_r1.Set((axis_1 + axis_4/2)/2);
+				motor_r2.Set((axis_1 + axis_4/2)/2);
+			}
+			/*else if(axis_4 > 0.2 || axis_4 < -0.2)
+			{
+				motor_l1.Set(axis_4);
+				motor_l2.Set(axis_4);
+				motor_r1.Set(axis_4);
+				motor_r2.Set(axis_4);
+			}*/
+			else
+			{
+				motor_l1.Set(0);
+				motor_l2.Set(0);
+				motor_r1.Set(0);
+				motor_r2.Set(0);
+			}
+
+			//motor powered solenoid
+	/*			if (stick.GetRawButton(5))
+				motor_solenoid.Set(1);
+			else if (stick.GetRawButton(6))
+				motor_solenoid.Set(-1);
+			else
+				motor_solenoid.Set(0);
+	*/
+			Wait(kupdateperiod);
+		}
+
+	}
+	/**
+	 * Runs during test mode
+	 */
+	void Test()
+	{
+		grab.Set(DoubleSolenoid::kReverse);
+		Wait(4.0);
+		grab.Set(DoubleSolenoid::kForward);
+
 	}
 };
 
